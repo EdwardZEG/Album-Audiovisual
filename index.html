@@ -27,7 +27,7 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 
-<body class="font-poppins">
+<body class="font-poppins d-flex flex-column min-vh-100" style="background-color:#f8fafc !important;">
 
     <style>
         html,
@@ -62,145 +62,129 @@
     </header>
 
     <!-- 📷 SECCIÓN PRINCIPAL (MAIN) -->
-    <main id="album" class="py-4 bg-light min-h-screen" style="margin-bottom:0;">
+    <main id="album" class="py-4 flex-grow-1" style="margin-bottom:0; background-color:#f8fafc !important;">
         <div class="container-fluid px-2 px-md-4">
-            <!-- Título de la sección -->
+            <!-- Carrusel Animales y Plantas -->
             <div class="text-center mb-5">
-                <h1 class="display-4 fw-bold text-gray-800 mb-3">
-                    Animales y Plantas
-                </h1>
+                <h2 class="display-6 fw-bold text-gray-800 mt-5 mb-5">Animales y Plantas</h2>
             </div>
-
-            <!-- Carrusel de fotos con Alpine.js -->
             <div class="row justify-content-center">
-                <div class="col-lg-8">
-                    <div x-data="carousel()" class="carousel-container bg-white rounded-lg shadow-lg p-4">
+                <div class="col-auto d-flex justify-content-center">
+                    <div x-data="carouselAnimales()"
+                        class="carousel-container bg-white rounded-lg shadow-lg p-4 d-inline-block" style="width:auto;">
+                        <div class="position-relative overflow-hidden rounded-lg mb-4 mx-auto"
+                            style="max-width:500px; width:100%;"
+                            :style="window.innerWidth < 768 ? 'max-width:95vw; height:auto; min-height:180px;' : 'max-width:500px; height:100%;'">
 
-
-                        <!-- Imagen principal y flechas -->
-                        <div class="position-relative overflow-hidden rounded-lg mb-4 w-100 mx-auto"
-                            style="max-width: 100%;">
-                            <img :src="images[currentIndex].src" :alt="images[currentIndex].alt"
-                                class="w-100 object-cover transition-all duration-500 d-block mx-auto"
-                                style="object-fit: cover; max-height:400px; width:100%;"
-                                :style="window.innerWidth < 768 ? 'max-height:60vw; min-height:180px; height:auto;' : 'max-height:400px;'">
-
-                            <!-- Flechas en desktop (absolutas) -->
+                            <img :src="images[currentIndex]" alt="Imagen Animales y Plantas"
+                                class="w-100 object-cover d-block mx-auto rounded-lg carousel-img-anim"
+                                style="object-fit: contain; width:100%; max-width:500px; max-height:500px; min-height:180px;"
+                                :class="window.innerWidth < 768 ? 'rounded-lg' : ''"
+                                :style="window.innerWidth < 768 ? 'max-width:95vw; height:auto; object-fit:contain;' : 'max-width:500px; height:100%; object-fit:cover;'"
+                                x-effect="document.querySelectorAll('.carousel-img-anim').forEach(img => { img.classList.remove('fade-in-scale'); }); $nextTick(() => { document.querySelectorAll('.carousel-img-anim')[0].classList.add('fade-in-scale'); })">
                             <div class="d-none d-md-block">
+                                <!-- Flechas solo en desktop -->
                                 <button @click="prevImage()"
-                                    class="btn btn-primary position-absolute start-0 top-50 translate-middle-y ms-3 rounded-circle p-2 shadow-lg hover:scale-110 transition-transform">
+                                    class="position-absolute start-0 top-50 translate-middle-y ms-3 rounded-circle border-0"
+                                    style="width:44px; height:44px; background: #0033a0; color: #fff; box-shadow: 0 2px 8px rgba(0,51,160,0.18); font-size:1.5rem; transition: transform 0.2s;">
                                     <i class="fas fa-chevron-left"></i>
                                 </button>
                                 <button @click="nextImage()"
-                                    class="btn btn-primary position-absolute end-0 top-50 translate-middle-y me-3 rounded-circle p-2 shadow-lg hover:scale-110 transition-transform">
+                                    class="position-absolute end-0 top-50 translate-middle-y me-3 rounded-circle border-0"
+                                    style="width:44px; height:44px; background: #0033a0; color: #fff; box-shadow: 0 2px 8px rgba(0,51,160,0.18); font-size:1.5rem; transition: transform 0.2s;">
                                     <i class="fas fa-chevron-right"></i>
                                 </button>
                             </div>
-
-                            <!-- Flechas en móvil (debajo de la imagen) -->
                             <div class="d-flex d-md-none justify-content-center gap-3 mt-3">
-                                <button @click="prevImage()" class="btn btn-primary rounded-circle p-2 shadow-lg">
+                                <button @click="prevImage()" class="rounded-circle border-0"
+                                    style="width:44px; height:44px; background: #0033a0; color: #fff; box-shadow: 0 2px 8px rgba(0,51,160,0.18); font-size:1.5rem; transition: transform 0.2s;">
                                     <i class="fas fa-chevron-left"></i>
                                 </button>
-                                <button @click="nextImage()" class="btn btn-primary rounded-circle p-2 shadow-lg">
+                                <button @click="nextImage()" class="rounded-circle border-0"
+                                    style="width:44px; height:44px; background: #0033a0; color: #fff; box-shadow: 0 2px 8px rgba(0,51,160,0.18); font-size:1.5rem; transition: transform 0.2s;">
                                     <i class="fas fa-chevron-right"></i>
                                 </button>
                             </div>
-
-                            <!-- Contador de imágenes -->
                             <div
                                 class="position-absolute bottom-0 end-0 bg-dark bg-opacity-75 text-white px-3 py-1 m-3 rounded d-none d-md-block">
                                 <span x-text="currentIndex + 1"></span> / <span x-text="images.length"></span>
                             </div>
-                            <div class="text-end text-white mt-2 d-md-none small">
+                            <div class="text-center text-dark mt-2 d-md-none small fw-bold">
                                 <span x-text="currentIndex + 1"></span> / <span x-text="images.length"></span>
                             </div>
                         </div>
+                    </div>
 
-                        <!-- Información de la imagen -->
-                        <div class="text-center">
-                            <h3 class="h5 fw-bold text-gray-800 mb-2" x-text="images[currentIndex].title"></h3>
-                            <p class="text-gray-600 mb-3" x-text="images[currentIndex].description"></p>
+                    <!-- Espaciador entre el carrusel de Rostros y el footer -->
+                    <div class="my-4"></div>
+                </div>
+            </div>
+        </div>
 
-                            <!-- Indicadores de puntos -->
-                            <div class="d-flex justify-content-center gap-2">
-                                <template x-for="(image, index) in images" :key="index">
-                                    <button @click="currentIndex = index" class="rounded-circle border-0 transition-all"
-                                        :class="currentIndex === index ? 'bg-primary' : 'bg-secondary'"
-                                        style="width: 12px; height: 12px;"></button>
-                                </template>
+        <!-- 📷 SECCIÓN PRINCIPAL (2) -->
+        <!-- Eliminado segundo main para evitar dobles fondo y problemas visuales -->
+        <div class="container-fluid px-2 px-md-4">
+            <!-- Carrusel Animales y Plantas -->
+            <div class="text-center mb-5">
+                <h2 class="display-6 fw-bold text-gray-800 mt-5 mb-3">Rostros</h2>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-auto d-flex justify-content-center">
+                    <div x-data="carouselRostros()"
+                        class="carousel-container bg-white rounded-lg shadow-lg p-4 d-inline-block" style="width:auto;">
+                        <div class="position-relative overflow-hidden rounded-lg mb-4 mx-auto"
+                            style="max-width:500px; width:100%;"
+                            :style="window.innerWidth < 768 ? 'max-width:95vw; height:auto; min-height:180px;' : 'max-width:500px; height:100%;'">
+
+                            <img :src="images[currentIndex]" alt="Imagen Rostros"
+                                class="w-100 object-cover d-block mx-auto rounded-lg carousel-img-anim"
+                                style="object-fit: contain; width:100%; max-width:500px; max-height:500px; min-height:180px;"
+                                :class="window.innerWidth < 768 ? 'rounded-lg' : ''"
+                                :style="window.innerWidth < 768 ? 'max-width:95vw; height:auto; object-fit:contain;' : 'max-width:500px; height:100%; object-fit:cover;'"
+                                x-effect="document.querySelectorAll('.carousel-img-anim').forEach(img => { img.classList.remove('fade-in-scale'); }); $nextTick(() => { document.querySelectorAll('.carousel-img-anim')[1].classList.add('fade-in-scale'); })">
+                            <div class="d-none d-md-block">
+                                <!-- Flechas solo en desktop -->
+                                <button @click="prevImage()"
+                                    class="position-absolute start-0 top-50 translate-middle-y ms-3 rounded-circle border-0"
+                                    style="width:44px; height:44px; background: #0033a0; color: #fff; box-shadow: 0 2px 8px rgba(0,51,160,0.18); font-size:1.5rem; transition: transform 0.2s;">
+                                    <i class="fas fa-chevron-left"></i>
+                                </button>
+                                <button @click="nextImage()"
+                                    class="position-absolute end-0 top-50 translate-middle-y me-3 rounded-circle border-0"
+                                    style="width:44px; height:44px; background: #0033a0; color: #fff; box-shadow: 0 2px 8px rgba(0,51,160,0.18); font-size:1.5rem; transition: transform 0.2s;">
+                                    <i class="fas fa-chevron-right"></i>
+                                </button>
+                            </div>
+                            <div class="d-flex d-md-none justify-content-center gap-3 mt-3">
+                                <button @click="prevImage()" class="rounded-circle border-0"
+                                    style="width:44px; height:44px; background: #0033a0; color: #fff; box-shadow: 0 2px 8px rgba(0,51,160,0.18); font-size:1.5rem; transition: transform 0.2s;">
+                                    <i class="fas fa-chevron-left"></i>
+                                </button>
+                                <button @click="nextImage()" class="rounded-circle border-0"
+                                    style="width:44px; height:44px; background: #0033a0; color: #fff; box-shadow: 0 2px 8px rgba(0,51,160,0.18); font-size:1.5rem; transition: transform 0.2s;">
+                                    <i class="fas fa-chevron-right"></i>
+                                </button>
+                            </div>
+                            <div
+                                class="position-absolute bottom-0 end-0 bg-dark bg-opacity-75 text-white px-3 py-1 m-3 rounded d-none d-md-block">
+                                <span x-text="currentIndex + 1"></span> / <span x-text="images.length"></span>
+                            </div>
+                            <div class="text-center text-dark mt-2 d-md-none small fw-bold">
+                                <span x-text="currentIndex + 1"></span> / <span x-text="images.length"></span>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <!-- Nueva sección: Otro carrusel -->
-        <div class="text-center mb-5 mt-5">
-            <h2 class="display-6 fw-bold text-gray-800 mb-3">
-                Rostros
-            </h2>
-        </div>
-        <div class="row justify-content-center">
-            <div class="col-lg-8">
-                <div x-data="carousel()" class="carousel-container bg-white rounded-lg shadow-lg p-4">
-                    <div class="position-relative overflow-hidden rounded-lg mb-4 w-100 mx-auto"
-                        style="max-width: 100%;">
-                        <img :src="images[currentIndex].src" :alt="images[currentIndex].alt"
-                            class="w-100 object-cover transition-all duration-500 d-block mx-auto"
-                            style="object-fit: cover; max-height:400px; width:100%;"
-                            :style="window.innerWidth < 768 ? 'max-height:60vw; min-height:180px; height:auto;' : 'max-height:400px;'">
 
-                        <!-- Flechas en desktop (absolutas) -->
-                        <div class="d-none d-md-block">
-                            <button @click="prevImage()"
-                                class="btn btn-primary position-absolute start-0 top-50 translate-middle-y ms-3 rounded-circle p-2 shadow-lg hover:scale-110 transition-transform">
-                                <i class="fas fa-chevron-left"></i>
-                            </button>
-                            <button @click="nextImage()"
-                                class="btn btn-primary position-absolute end-0 top-50 translate-middle-y me-3 rounded-circle p-2 shadow-lg hover:scale-110 transition-transform">
-                                <i class="fas fa-chevron-right"></i>
-                            </button>
-                        </div>
-
-                        <!-- Flechas en móvil (debajo de la imagen) -->
-                        <div class="d-flex d-md-none justify-content-center gap-3 mt-3">
-                            <button @click="prevImage()" class="btn btn-primary rounded-circle p-2 shadow-lg">
-                                <i class="fas fa-chevron-left"></i>
-                            </button>
-                            <button @click="nextImage()" class="btn btn-primary rounded-circle p-2 shadow-lg">
-                                <i class="fas fa-chevron-right"></i>
-                            </button>
-                        </div>
-
-                        <!-- Contador de imágenes -->
-                        <div
-                            class="position-absolute bottom-0 end-0 bg-dark bg-opacity-75 text-white px-3 py-1 m-3 rounded d-none d-md-block">
-                            <span x-text="currentIndex + 1"></span> / <span x-text="images.length"></span>
-                        </div>
-                        <div class="text-end text-white mt-2 d-md-none small">
-                            <span x-text="currentIndex + 1"></span> / <span x-text="images.length"></span>
-                        </div>
-                    </div>
-                    <div class="text-center">
-                        <h3 class="h5 fw-bold text-gray-800 mb-2" x-text="images[currentIndex].title"></h3>
-                        <p class="text-gray-600 mb-3" x-text="images[currentIndex].description"></p>
-                        <div class="d-flex justify-content-center gap-2">
-                            <template x-for="(image, index) in images" :key="index">
-                                <button @click="currentIndex = index" class="rounded-circle border-0 transition-all"
-                                    :class="currentIndex === index ? 'bg-primary' : 'bg-secondary'"
-                                    style="width: 12px; height: 12px;"></button>
-                            </template>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <!-- Espaciador entre el carrusel de Rostros y el footer -->
+            <div class="my-5"></div>
         </div>
     </main>
 
     <!-- 🔻 FOOTER -->
     <footer class="bg-black text-light pt-5 pb-3 border-0"
-        style="margin-top:0; box-shadow:none; background-image:none;">
+        style="margin-top:0; box-shadow:none; background-image:none; border-bottom:none;">
         <div class="container">
             <div class="row gy-4 align-items-center">
                 <!-- Columna 1: Logo y descripción -->
@@ -210,7 +194,8 @@
                             class="mb-2">
                     </div>
                     <p class="small mb-0 text-secondary">Nuestro Álbum | UTRM</p>
-                    <p class="small text-secondary mb-0">Un proyecto académico para compartir recuerdos y experiencias.
+                    <p class="small text-secondary mb-0">Un proyecto académico para compartir recuerdos y
+                        experiencias.
                     </p>
                     <div class="mt-2">
                         <span class="small fw-bold text-white d-block">Integrantes</span>
@@ -232,16 +217,20 @@
                     <a href="https://www.google.com/maps/place/Universidad+Tecnol%C3%B3gica+de+la+Riviera+Maya+-+BIS/data=!4m2!3m1!1s0x0:0x25d0481d668fb996?sa=X&ved=1t:2428&ictx=111"
                         target="_blank" class="text-secondary text-decoration-none hover:text-blue-300 d-block mb-1"><i
                             class="fas fa-map-marker-alt me-1"></i>Cómo llegar</a>
-                    <span class="small text-secondary d-block mb-1"><i class="fas fa-phone me-1"></i>984 877 4600</span>
-                    <span class="small text-secondary d-block mb-1"><i class="fas fa-clock me-1"></i>Abierto ⋅ Cierra a
-                        las 5 p.m.</span>
+                    <span class="small text-secondary d-block mb-1"><i class="fas fa-phone me-1"></i>984 877
+                        4600</span>
+                    <span class="small text-secondary d-block mb-1"><i class="fas fa-clock me-1"></i>Abierto ⋅
+                        Cierra a
+                        las 5 p.m.</span>
                 </div>
                 <!-- Columna 3: Breve descripción justificada -->
                 <div class="col-md-4 text-justify text-md-end">
                     <blockquote class="blockquote text-secondary small mt-2 mb-0"
                         style="font-size:0.95em; border-left: 3px solid #0d6efd; padding-left: 0.75em; text-align:justify;">
-                        "Somos una Institución Pública Bilingüe dispuesta a cumplir con las demandas y exigencias
-                        educativas de los jóvenes universitarios. No se requiere contar con un nivel mínimo de Inglés
+                        "Somos una Institución Pública Bilingüe dispuesta a cumplir con las demandas y
+                        exigencias
+                        educativas de los jóvenes universitarios. No se requiere contar con un nivel mínimo de
+                        Inglés
                         para los alumnos de nuevo ingreso."
                     </blockquote>
                 </div>
@@ -274,7 +263,106 @@
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-    <!-- JavaScript personalizado -->
+    <style>
+        .carousel-img-anim {
+            opacity: 0;
+            transform: scale(0.97);
+            transition: opacity 0.5s cubic-bezier(.68, -0.55, .27, 1.55), transform 0.5s cubic-bezier(.68, -0.55, .27, 1.55);
+        }
+
+        .carousel-img-anim.fade-in-scale {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        body {
+            background-color: #f8fafc !important;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        main {
+            flex-grow: 1;
+            background-color: #f8fafc !important;
+        }
+
+        footer {
+            border-bottom: none !important;
+        }
+    </style>
+
+    <!-- Carrusel Animales y Plantas -->
+    <script>
+        function carouselAnimales() {
+            return {
+                images: [
+                    "img/Carrusel1/Telaraña en letrero de edificio N.jpeg",
+                    "img/Carrusel1/WhatsApp Image 2025-07-22 at 10.23.31 AM.jpeg",
+                    "img/Carrusel1/WhatsApp Image 2025-07-22 at 10.23.32 AM.jpeg",
+                    "img/Carrusel1/WhatsApp Image 2025-07-22 at 10.23.33 AM.jpeg",
+                    "img/Carrusel1/WhatsApp Image 2025-07-22 at 10.23.39 AM.jpeg",
+                    "img/Carrusel1/WhatsApp Image 2025-07-22 at 10.23.41 AM (1).jpeg",
+                    "img/Carrusel1/WhatsApp Image 2025-07-22 at 10.23.41 AM.jpeg",
+                    "img/Carrusel1/WhatsApp Image 2025-07-22 at 10.23.49 AM.jpeg",
+                    "img/Carrusel1/WhatsApp Image 2025-07-22 at 10.26.13 AM.jpeg",
+                    "img/Carrusel1/WhatsApp Image 2025-07-22 at 10.31.20 AM.jpeg",
+                    "img/Carrusel1/WhatsApp Image 2025-07-24 at 10.49.37 AM.jpeg",
+                    "img/Carrusel1/WhatsApp Image 2025-07-24 at 10.49.44 AM.jpeg",
+                    "img/Carrusel1/Zarzamora.jpeg"
+                ],
+                currentIndex: 0,
+                prevImage() {
+                    this.currentIndex = (this.currentIndex - 1 + this.images.length) % this.images.length;
+                },
+                nextImage() {
+                    this.currentIndex = (this.currentIndex + 1) % this.images.length;
+                }
+            }
+        }
+        function carouselRostros() {
+            return {
+                images: [
+                    "img/Carrusel2/IMG_20250724_105155.jpg",
+                    "img/Carrusel2/IMG_20250724_105231.jpg",
+                    "img/Carrusel2/IMG_20250724_105836.jpg",
+                    "img/Carrusel2/IMG_20250724_105841.jpg",
+                    "img/Carrusel2/IMG_20250724_110352.jpg",
+                    "img/Carrusel2/IMG_20250724_110848.jpg",
+                    "img/Carrusel2/IMG_20250724_111344.jpg",
+                    "img/Carrusel2/IMG_20250724_111604.jpg",
+                    "img/Carrusel2/IMG_20250724_111626.jpg",
+                    "img/Carrusel2/IMG_20250724_111652.jpg",
+                    "img/Carrusel2/IMG_20250724_111832.jpg",
+                    "img/Carrusel2/IMG_20250724_112032.jpg",
+                    "img/Carrusel2/IMG_20250724_112407.jpg",
+                    "img/Carrusel2/IMG_20250724_112447.jpg",
+                    "img/Carrusel2/IMG_20250724_112500.jpg",
+                    "img/Carrusel2/IMG_20250724_112510.jpg",
+                    "img/Carrusel2/IMG_20250724_112514.jpg",
+                    "img/Carrusel2/IMG_20250724_112555.jpg",
+                    "img/Carrusel2/IMG_20250724_112752.jpg",
+                    "img/Carrusel2/IMG_20250724_112757.jpg",
+                    "img/Carrusel2/IMG_20250724_113111.jpg",
+                    "img/Carrusel2/IMG_20250724_113117.jpg",
+                    "img/Carrusel2/IMG_20250724_113258.jpg",
+                    "img/Carrusel2/IMG_20250724_113511.jpg",
+                    "img/Carrusel2/WhatsApp Image 2025-07-24 at 12.00.49 PM (1).jpeg",
+                    "img/Carrusel2/WhatsApp Image 2025-07-24 at 12.00.49 PM.jpeg",
+                    "img/Carrusel2/WhatsApp Image 2025-07-24 at 12.00.50 PM (1).jpeg",
+                    "img/Carrusel2/WhatsApp Image 2025-07-24 at 12.00.50 PM (2).jpeg",
+                    "img/Carrusel2/WhatsApp Image 2025-07-24 at 12.00.50 PM.jpeg"
+                ],
+                currentIndex: 0,
+                prevImage() {
+                    this.currentIndex = (this.currentIndex - 1 + this.images.length) % this.images.length;
+                },
+                nextImage() {
+                    this.currentIndex = (this.currentIndex + 1) % this.images.length;
+                }
+            }
+        }
+    </script>
     <style>
         @keyframes bounceUpOnce {
             0% {
@@ -314,8 +402,6 @@
             }
         });
     </script>
-    <!-- No se requiere script extra para el segundo carrusel, se reutiliza el primero -->
-    <script src="script.js"></script>
 </body>
 
 </html>
